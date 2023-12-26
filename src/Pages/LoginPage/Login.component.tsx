@@ -8,14 +8,16 @@ import {
 } from "@mui/material";
 import RInputField from "../../Core/RInputField";
 import RButton from "../../Core/RButton";
-import { StyledDateTimeCard, StyledLoginCard } from "./LoginComponents";
-import { useContext, useEffect, useState } from "react";
-import { IDateTime, ILoginInformation } from "./Login.types";
+import { StyledDateTimeCard, StyledLoginCard } from "./Login.core";
+import { ChangeEvent, useContext, useEffect, useState } from "react";
+import { IDateTime, ILoginInformation, IUserError } from "./Login.types";
 import { getDateAndTime } from "../../Utils/DateTime.method";
-import {
-  IMobileContextType,
-  MobileDisplayContext,
-} from "../../Store/Context/MobileDisplayContext";
+import RLoader from "../../Core/RLoader";
+
+const initialErrorState: IUserError = {
+  usernameError: false,
+  passwordError: false,
+};
 
 const Login = () => {
   const [userLoginInformation, setUserLoginInformation] =
@@ -27,7 +29,17 @@ const Login = () => {
     date: "",
     time: "",
   });
-  const { isMobile } = useContext<IMobileContextType>(MobileDisplayContext);
+  const [errorFields, setErrorFields] = useState<IUserError>(initialErrorState);
+
+  const handleInputChange = (
+    event: ChangeEvent<HTMLInputElement>,
+    name: string
+  ) => {
+    setUserLoginInformation((prev) => ({
+      ...prev,
+      [name]: event.target.value,
+    }));
+  };
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -38,6 +50,22 @@ const Login = () => {
       clearInterval(interval);
     };
   }, [dateTimeObject.time]);
+
+  useEffect(() => {
+    setErrorFields((p) => ({ ...p, usernameError: false }));
+  }, [userLoginInformation.username]);
+  useEffect(() => {
+    setErrorFields((p) => ({ ...p, passwordError: false }));
+  }, [userLoginInformation.password]);
+
+  const handleLoginEvent = () => {
+    if (userLoginInformation.username.length === 0) {
+      setErrorFields((p) => ({ ...p, usernameError: true }));
+    }
+    if (userLoginInformation.password.length === 0) {
+      setErrorFields((p) => ({ ...p, passwordError: true }));
+    }
+  };
 
   return (
     <Container
@@ -51,14 +79,20 @@ const Login = () => {
       }}
     >
       <StyledDateTimeCard elevation={5}>
-        <Stack direction={"row"} gap={2}>
-          <Typography fontWeight={600}>Date :</Typography>
-          <Typography>{dateTimeObject.date}</Typography>
-        </Stack>
-        <Stack direction={"row"} gap={2}>
-          <Typography fontWeight={600}>Time :</Typography>
-          <Typography> {dateTimeObject.time}</Typography>
-        </Stack>
+        {!dateTimeObject.date ? (
+          <RLoader />
+        ) : (
+          <>
+            <Stack direction={"row"} gap={2}>
+              <Typography fontWeight={600}>Date :</Typography>
+              <Typography>{dateTimeObject.date}</Typography>
+            </Stack>
+            <Stack direction={"row"} gap={2}>
+              <Typography fontWeight={600}>Time :</Typography>
+              <Typography> {dateTimeObject.time}</Typography>
+            </Stack>
+          </>
+        )}
       </StyledDateTimeCard>
       <StyledLoginCard
         elevation={5}
@@ -77,21 +111,21 @@ const Login = () => {
           </Stack>
           <RInputField
             title="User Name"
-            changeHandler={() => {}}
-            value=""
+            changeHandler={(e) => handleInputChange(e, "username")}
+            value={userLoginInformation.username}
             required={true}
-            errorValue={true}
+            errorValue={errorFields.usernameError}
           />
           <RInputField
             title="Password"
-            changeHandler={() => {}}
-            value=""
+            changeHandler={(e) => handleInputChange(e, "password")}
+            value={userLoginInformation.password}
             required={true}
             type="password"
-            errorValue={true}
+            errorValue={errorFields.passwordError}
           />
           <Stack direction={"row"} marginBlock={2} gap={2}>
-            <RButton title={"Login"} clickHandler={() => {}} />
+            <RButton title={"Login"} clickHandler={handleLoginEvent} />
             <RButton
               title={"Singup"}
               variant="outlined"

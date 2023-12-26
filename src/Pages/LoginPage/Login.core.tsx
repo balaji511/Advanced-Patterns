@@ -19,7 +19,10 @@ export const StyledDateTimeCard = styled(Card)(({ theme }) => {
     display: "flex",
     flexDirection: "column",
     justifyContent: "center",
+    width: "16vw",
+
     [theme.breakpoints.down("md")]: {
+      width: "25vw",
       alignSelf: "center",
     },
   };
