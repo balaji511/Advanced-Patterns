@@ -1,11 +1,4 @@
-import {
-  Card,
-  CardContent,
-  CardHeader,
-  Container,
-  Stack,
-  Typography,
-} from "@mui/material";
+import { CardContent, Container, Grid, Stack, Typography } from "@mui/material";
 import RInputField from "../../Core/RInputField";
 import RButton from "../../Core/RButton";
 import { StyledDateTimeCard, StyledLoginCard } from "./Login.core";
@@ -13,6 +6,13 @@ import { ChangeEvent, useContext, useEffect, useState } from "react";
 import { IDateTime, ILoginInformation, IUserError } from "./Login.types";
 import { getDateAndTime } from "../../Utils/DateTime.method";
 import RLoader from "../../Core/RLoader";
+import RPopup from "../../Core/RPopup";
+import {
+  IMobileContextType,
+  MobileDisplayContext,
+} from "../../Store/Context/MobileDisplayContext";
+import AccessTimeFilledIcon from "@mui/icons-material/AccessTimeFilled";
+import DateRangeIcon from "@mui/icons-material/DateRange";
 
 const initialErrorState: IUserError = {
   usernameError: false,
@@ -30,6 +30,7 @@ const Login = () => {
     time: "",
   });
   const [errorFields, setErrorFields] = useState<IUserError>(initialErrorState);
+  const { isMobile } = useContext<IMobileContextType>(MobileDisplayContext);
 
   const handleInputChange = (
     event: ChangeEvent<HTMLInputElement>,
@@ -83,11 +84,13 @@ const Login = () => {
           <RLoader />
         ) : (
           <>
-            <Stack direction={"row"} gap={2}>
+            <Stack direction={"row"} gap={1} mt={1}>
+              <DateRangeIcon />
               <Typography fontWeight={600}>Date :</Typography>
               <Typography>{dateTimeObject.date}</Typography>
             </Stack>
-            <Stack direction={"row"} gap={2}>
+            <Stack direction={"row"} gap={1} mt={1}>
+              <AccessTimeFilledIcon />
               <Typography fontWeight={600}>Time :</Typography>
               <Typography> {dateTimeObject.time}</Typography>
             </Stack>
@@ -134,6 +137,13 @@ const Login = () => {
           </Stack>
         </CardContent>
       </StyledLoginCard>
+      <RPopup visible={false}>
+        <Grid container sx={{ width: isMobile ? "80vw" : "50vw", padding: 2 }}>
+          <Grid item xs={12}>
+            <Typography>Register User</Typography>
+          </Grid>
+        </Grid>
+      </RPopup>
     </Container>
   );
 };
