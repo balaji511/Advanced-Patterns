@@ -13,6 +13,7 @@ import {
 } from "../../Store/Context/MobileDisplayContext";
 import AccessTimeFilledIcon from "@mui/icons-material/AccessTimeFilled";
 import DateRangeIcon from "@mui/icons-material/DateRange";
+import "./Login.css";
 
 const initialErrorState: IUserError = {
   usernameError: false,
@@ -31,6 +32,7 @@ const Login = () => {
   });
   const [errorFields, setErrorFields] = useState<IUserError>(initialErrorState);
   const { isMobile } = useContext<IMobileContextType>(MobileDisplayContext);
+  const [registerPopup, setRegisterPopup] = useState<boolean>(false);
 
   const handleInputChange = (
     event: ChangeEvent<HTMLInputElement>,
@@ -97,12 +99,7 @@ const Login = () => {
           </>
         )}
       </StyledDateTimeCard>
-      <StyledLoginCard
-        elevation={5}
-        sx={{
-          width: "30dvw",
-        }}
-      >
+      <StyledLoginCard elevation={5}>
         <CardContent>
           <Stack direction={"row"} justifyContent={"center"}>
             <Typography variant="h5" fontWeight={"bold"} color={"orange"}>
@@ -132,15 +129,22 @@ const Login = () => {
             <RButton
               title={"Singup"}
               variant="outlined"
-              clickHandler={() => {}}
+              clickHandler={() => setRegisterPopup(true)}
             />
           </Stack>
         </CardContent>
       </StyledLoginCard>
-      <RPopup visible={false}>
+      <RPopup visible={registerPopup} parentClass="register-popup">
         <Grid container sx={{ width: isMobile ? "80vw" : "50vw", padding: 2 }}>
           <Grid item xs={12}>
-            <Typography>Register User</Typography>
+            <Typography fontWeight={"bold"}>Register User</Typography>
+            <RInputField
+              title={"User Name"}
+              value={""}
+              changeHandler={() => {}}
+              required={true}
+              errorValue={false}
+            />
           </Grid>
         </Grid>
       </RPopup>

@@ -10,7 +10,7 @@ export const MobileDisplayContext = createContext<IMobileContextType>({
 });
 
 export const MobileDisplayContextProvider = ({ children }: any) => {
-  const isMobileValue = useMediaQuery("(max-width:768px)");
+  const isMobileValue = useMediaQuery("(max-width:900px)");
   const [isMobile, setIsMobile] = useState<boolean>(isMobileValue);
   useEffect(() => {
     setIsMobile(isMobileValue);

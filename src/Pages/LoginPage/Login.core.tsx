@@ -2,7 +2,7 @@ import { Card, styled } from "@mui/material";
 
 export const StyledLoginCard = styled(Card)(({ theme }) => {
   return {
-    width: "35dvw",
+    width: "40dvw",
     [theme.breakpoints.down("md")]: {
       width: "90vw",
     },
