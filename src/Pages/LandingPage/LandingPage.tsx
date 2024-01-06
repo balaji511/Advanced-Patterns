@@ -1,5 +1,7 @@
+import RCustomCalender from "../../Core/RCustomCalender";
+
 const LandingPage = () => {
-  return <div>LandingPage</div>;
+  return <RCustomCalender />;
 };
 
 export default LandingPage;

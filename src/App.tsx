@@ -4,6 +4,11 @@ import AppRoutes from "./Routes/AppRoutes";
 import { MobileDisplayContextProvider } from "./Store/Context/MobileDisplayContext";
 
 const App = () => {
+  //
+  const username = sessionStorage.getItem("username");
+  console.log(username);
+
+  //
   return (
     <Container
       sx={{ minHeight: "100vh", bgcolor: "whitesmoke" }}

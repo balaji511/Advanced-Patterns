@@ -28,6 +28,7 @@ const RButton = ({
       size="large"
       color={color}
       onClick={clickHandler}
+      sx={{ width: "100%" }}
     >
       {title}
     </Button>
